@@ -1,8 +1,25 @@
 import logo from './logo.svg';
 import './App.css';
 
+import {currentToken,onMessageListener} from './firebaseinit'
+
 function App() {
-  return (
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./firebase-messaging-sw.js')
+      .then(function(registration) {
+        console.log('Registration successful, scope is:', registration.scope);
+      }).catch(function(err) {
+        console.log('Service worker registration failed, error:', err);
+      });
+    }
+
+    currentToken().then().catch((err)=>console.log("catched:",err))
+    onMessageListener().then(payload => {
+      console.log(payload);
+    }).catch(err => console.log('failed: ', err));
+
+
+return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
